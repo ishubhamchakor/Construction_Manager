@@ -1,68 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import './Admin.css';
+import ProjectRegistration from './ProjectRegistration'; // Import the ProjectRegistration component
 
-const AdminLandingPage = () => {
-  const [projects, setProjects] = useState([]);
-  const [projectManagers, setProjectManagers] = useState({});
+const AdminDashboard = () => {
+  const [user, setUser] = useState(null);
+  const [showProjectForm, setShowProjectForm] = useState(false); // State to control the display of the project form
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch projects from the API
-    axios.get('http://your-api-endpoint/projects')
-      .then(response => {
-        setProjects(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching projects:', error);
-      });
-
-    // Fetch project managers from the API
-    axios.get('http://your-api-endpoint/project-managers')
-      .then(response => {
-        setProjectManagers(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching project managers:', error);
-      });
+    // Fetch user details (assuming the user is already authenticated)
+    const fetchedUser = { name: 'Admin User' }; // Replace with actual user fetching logic
+    setUser(fetchedUser);
   }, []);
 
-  const handleManagerChange = (projectId, managerId) => {
-    // Update the project manager for a specific project
-    axios.post(`http://your-api-endpoint/projects/${projectId}/assign-manager`, { managerId })
-      .then(response => {
-        console.log('Project manager updated:', response.data);
-        // Update the state to reflect changes if needed
-      })
-      .catch(error => {
-        console.error('Error updating project manager:', error);
-      });
+  const handleProfileClick = () => {
+    // Navigate to the profile page (assuming it's implemented)
+    navigate('/profile');
+  };
+
+  const handleProjectFormToggle = () => {
+    setShowProjectForm(!showProjectForm);
   };
 
   return (
-    <main className="admin-main">
-      <h2>Admin Dashboard</h2>
-      <div className="project-list">
-        {projects.map(project => (
-          <div key={project.id} className="project-item">
-            <h3>{project.name}</h3>
-            <p>{project.description}</p>
-            <label>
-              Select Project Manager:
-              <select
-                value={project.managerId || ''}
-                onChange={e => handleManagerChange(project.id, e.target.value)}
-              >
-                <option value="">Select a manager</option>
-                {projectManagers.map(manager => (
-                  <option key={manager.id} value={manager.id}>{manager.name}</option>
-                ))}
-              </select>
-            </label>
+    <div className="container mt-5">
+      {user && <h2 className="text-center mb-4 text-primary">Welcome, {user.name}!</h2>}
+      <button className="btn btn-outline-dark mb-4" onClick={handleProfileClick}>Profile</button>
+      <div className="row">
+        <div className="col-md-6 mb-4">
+          <div className="card h-100 shadow-sm border-primary">
+            <div className="card-body bg-light text-dark">
+              <h5 className="card-title text-primary">Click here for creating the users</h5>
+              <p className="card-text">Easily add new users to the system, such as Project Managers and Site Engineers.</p>
+              <Link to="/register" className="btn btn-primary">Registration</Link>
+            </div>
           </div>
-        ))}
+        </div>
+        <div className="col-md-6 mb-4">
+          <div className="card h-100 shadow-sm border-primary">
+            <div className="card-body bg-light text-dark">
+              <h5 className="card-title text-primary">Register the new projects here</h5>
+              <p className="card-text">Submit new projects to be managed within the system.</p>
+              <button className="btn btn-primary" onClick={handleProjectFormToggle}>Project Registration</button>
+            </div>
+          </div>
+        </div>
       </div>
-    </main>
+      {showProjectForm && <ProjectRegistration onClose={handleProjectFormToggle} />}
+    </div>
   );
 };
 
-export default AdminLandingPage;
+export default AdminDashboard;

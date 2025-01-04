@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios';
 import './Login.css';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const Login = () => {
   });
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate(); // Initialize navigate
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,19 +28,28 @@ const Login = () => {
       const roleID = response.data.roleID; // Assuming the backend returns "roleID"
       console.log('Login successful with Role ID:', roleID);
 
-      if (roleID === 1) {
+      if (roleID === 1) 
+      {
         console.log('Admin login successful');
         navigate('/admin'); // Redirect to the admin page
-      } else if (roleID === 2) {
+      } 
+      else if (roleID === 2) 
+      {
         console.log('Project_Manager login successful');
         navigate('/projectManager'); // Redirect to the user dashboard
-      } else if (roleID === 3) {
+      } 
+      else if (roleID === 3) 
+      {
         console.log('SiteEngineer login successful');
         navigate('/SiteEngineer'); // Redirect to the manager dashboard
-      } else if (roleID === 4) {
+      } 
+      else if (roleID === 4) 
+      {
         console.log('Client login successful');
         navigate('/Client'); // Redirect to the Client dashboard
-      } else {
+      } 
+      else 
+      {
         console.error('Unknown role ID:', roleID);
         setErrorMessage('Unknown role. Please contact support.');
       }

@@ -1,14 +1,11 @@
 package com.example.demo.services;
 
-
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
@@ -18,45 +15,49 @@ import com.example.demo.repository.UserRepository;
 @Service
 public class UserServices {
 
+    @Autowired
+    private UserRepository urepo;
 
-	@Autowired
-	private UserRepository urepo;
-	public ResponseEntity<String> registerUser(User user) {
-		System.out.print(user);
+    @Autowired
+    private RoleRepository rrepo;
 
-		// Check if the username already exists
-		if (urepo.countByName(user.getName()) > 0) {
-			return new ResponseEntity<>("Username already taken", HttpStatus.BAD_REQUEST);
-		}
+    public ResponseEntity<String> registerUser(User user) {
+        // Check if the username already exists
+        if (urepo.countByName(user.getName()) > 0) {
+            return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
+        }
 
-		// check Name Cannot Be Empty
-		if (user.getName().isEmpty()) {
-			throw new IllegalArgumentException("User Name Canot Be Emty");
-		}
+        // Check Name Cannot Be Empty
+        if (user.getName().isEmpty()) {
+            throw new IllegalArgumentException("User Name cannot be empty");
+        }
 
-		// Validate all fields are not null
-		if (user.getName() == null || user.getPassword() == null || user.getEmail() == null) {
-			return new ResponseEntity<>("All fields are required", HttpStatus.BAD_REQUEST);
-		}
+        // Validate all fields are not null
+        if (user.getName() == null || user.getPassword() == null || user.getEmail() == null) {
+            return new ResponseEntity<>("All fields are required", HttpStatus.BAD_REQUEST);
+        }
 
-		// Save the new user
-		urepo.save(user);
-		return new ResponseEntity<>("User registered successfully", HttpStatus.OK);	
-		
-	}
+        // Fetch and assign role to user
+        Role role = rrepo.findById(user.getRole().getRoleID()).orElse(null);
+        if (role == null) {
+            return new ResponseEntity<>("Role not found", HttpStatus.BAD_REQUEST);
+        }
+        user.setRole(role);
 
-	public int validateLogin(String email, String password) {
-	    // Fetch the user from the database by email
-	    User user = urepo.findByEmail(email);
+        // Save the new user
+        urepo.save(user);
+        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+    }
 
-	    // Check if the user exists and the password matches
-	    if (user != null && user.getPassword().equals(password)) {
-	        return user.getRole().getRoleID(); // Return role ID instead of name
-	    }
+    public Optional<User> loginUser(String email, String password) {
+        Optional<User> user = urepo.findByEmail(email);
+        if (user.isPresent() && user.get().getPassword().equals(password)) {
+            return user;  // Return the user if login is successful
+        }
+        return Optional.empty();  // Return empty if user not found or credentials invalid
+    }
 
-	    // Return a default value (e.g., -1) to indicate invalid login
-	    return -1;
-	}
-
-
+    public Optional<User> findUserByEmail(String email) {
+        return urepo.findByEmail(email);
+    }
 }

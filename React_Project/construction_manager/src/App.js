@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import Home from './components/Home';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
@@ -16,15 +15,15 @@ import { RaiseIssue } from './components/RaiseIssue';
 function App() {
   return (
     <Routes>
-      {/* <Route path="/" element={<Home />} />
+      <Route path="/" element={<Home />} />
       <Route path='/login' element={<LoginPage />} />
       <Route path="/register" element={<Registration />} />
       <Route path="/admin" element={< AdminLandingPage />} />
-      <Route path="/projectManager" element={<Projectmanager />} /> */}
+      <Route path="/projectManager" element={<Projectmanager />} />
       <Route path="/siteEngineer" element={<SiteEngineer />} />
-      {/* <Route path="/Client" element={<Client />} />
+      <Route path="/Client" element={<Client />} />
       <Route path="/project" element={<Projects />} />
-      <Route path="/project" element={<Projects />} /> */}
+      <Route path="/project" element={<Projects />} />
       <Route path="/raiseIssue" element={<RaiseIssue />} />
     </Routes>
   );

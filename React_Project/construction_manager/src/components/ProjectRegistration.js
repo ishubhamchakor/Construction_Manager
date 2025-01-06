@@ -46,10 +46,10 @@ const ProjectRegistration = ({ onClose }) => {
       <section className="registration">
         <h2 className="text-center mb-4 text-primary">Register Project</h2>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <div className="form-group">
+          {/* <div className="form-group">
             <label>Project ID:</label>
             <input type="text" name="projectId" className="form-control" value={formData.projectId} onChange={handleChange} required />
-          </div>
+          </div> */}
           <div className="form-group">
             <label>Name:</label>
             <input type="text" name="name" className="form-control" value={formData.name} onChange={handleChange} required />

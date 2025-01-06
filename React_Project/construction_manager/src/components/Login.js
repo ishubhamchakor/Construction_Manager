@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios';
 import './Login.css';
+import { loginSuccess } from '../redux/Slice/authSlice';
 import { useDispatch } from 'react-redux';
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +13,7 @@ const Login = () => {
   });
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate(); // Initialize navigate
+  const dispatch = useDispatch();
 
 
   const handleChange = (e) => {
@@ -23,10 +26,19 @@ const Login = () => {
 
     try {
       const response = await axios.post('http://localhost:1111/login', formData);
+      const data = response.data;  // Check the roleID returned by the backend
+      const roleID = data.role.roleID;  // Assuming the backend returns "roleID"
 
-      // Check the roleID returned by the backend
-      const roleID = response.data.roleID; // Assuming the backend returns "roleID"
       console.log('Login successful with Role ID:', roleID);
+
+      dispatch (
+        loginSuccess({
+          username: data.name,
+          role: data.role.roleID,
+          email: data.email,
+          uid: data.userID,
+        })
+      )
 
       if (roleID === 1) 
       {

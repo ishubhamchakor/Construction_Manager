@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `projectmanagementdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `projectmanagementdb`;
+CREATE DATABASE  IF NOT EXISTS `p17_construction_manager` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `p17_construction_manager`;
 -- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: projectmanagementdb
+-- Host: localhost    Database: p17_construction_manager
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	8.2.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -120,6 +120,37 @@ INSERT INTO `progress` VALUES (25,33,20,20,'2025-01-20','Foundation work started
 UNLOCK TABLES;
 
 --
+-- Table structure for table `project`
+--
+
+DROP TABLE IF EXISTS `project`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `project` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) DEFAULT NULL,
+  `project_name` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `created_by` int DEFAULT NULL,
+  `managed_by` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK130q86aiyxo2fdp6lytxvwoxx` (`created_by`),
+  KEY `FKm10onaw6up7ejiinvi49toe6j` (`managed_by`),
+  CONSTRAINT `FK130q86aiyxo2fdp6lytxvwoxx` FOREIGN KEY (`created_by`) REFERENCES `users` (`UserID`),
+  CONSTRAINT `FKm10onaw6up7ejiinvi49toe6j` FOREIGN KEY (`managed_by`) REFERENCES `users` (`UserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `project`
+--
+
+LOCK TABLES `project` WRITE;
+/*!40000 ALTER TABLE `project` DISABLE KEYS */;
+/*!40000 ALTER TABLE `project` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `projects`
 --
 
@@ -131,16 +162,13 @@ CREATE TABLE `projects` (
   `ProjectName` varchar(255) NOT NULL,
   `Description` text NOT NULL,
   `StartDate` date NOT NULL,
-  `EndDate` date NOT NULL,
-  `Status` varchar(50) NOT NULL,
+  `DueDate` date NOT NULL,
   `ManagedBy` int DEFAULT NULL,
-  `CreatedBy` int DEFAULT NULL,
   `FileAttachment` blob,
+  `Status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ProjectID`),
   KEY `ManagedBy` (`ManagedBy`),
-  KEY `CreatedBy` (`CreatedBy`),
-  CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`ManagedBy`) REFERENCES `users` (`UserID`),
-  CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`CreatedBy`) REFERENCES `users` (`UserID`)
+  CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`ManagedBy`) REFERENCES `users` (`UserID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -150,7 +178,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` VALUES (20,'Greenfield Housing Project','A residential housing project involving eco-friendly materials and sustainable designs.','2025-01-01','2026-12-31','In Progress',19,18,NULL),(21,'Metro Rail Construction','Development of a new metro rail line in Mumbai to ease traffic congestion.','2024-06-01','2027-05-31','In Progress',19,18,NULL),(22,'Smart City Initiative','Urban development with smart technologies like IoT-based traffic management in Pune.','2023-03-01','2025-12-31','In Progress',19,18,NULL);
+INSERT INTO `projects` VALUES (20,'Greenfield Housing Project','A residential housing project involving eco-friendly materials and sustainable designs.','2025-01-01','2026-12-31',19,NULL,NULL),(21,'Metro Rail Construction','Development of a new metro rail line in Mumbai to ease traffic congestion.','2024-06-01','2027-05-31',19,NULL,NULL),(22,'Smart City Initiative','Urban development with smart technologies like IoT-based traffic management in Pune.','2023-03-01','2025-12-31',19,NULL,NULL);
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -164,6 +192,7 @@ DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
   `RoleID` int NOT NULL AUTO_INCREMENT,
   `RoleName` varchar(255) NOT NULL,
+  `role_name` varchar(255) NOT NULL,
   PRIMARY KEY (`RoleID`),
   UNIQUE KEY `Unique_RoleName` (`RoleName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -175,8 +204,42 @@ CREATE TABLE `roles` (
 
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES (1,'Admin'),(4,'Client'),(2,'Project Manager'),(3,'Site Engineer');
+INSERT INTO `roles` VALUES (1,'Admin',''),(2,'Project Manager',''),(3,'Site Engineer',''),(4,'Client','');
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `task`
+--
+
+DROP TABLE IF EXISTS `task`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `task` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `task_name` varchar(255) DEFAULT NULL,
+  `assigned_by` int DEFAULT NULL,
+  `assigned_to` int DEFAULT NULL,
+  `project_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKr7ydi8q6e7u0b6qmj9an9x8a` (`assigned_by`),
+  KEY `FK4amgamieqvrq9ej2wy2oe6878` (`assigned_to`),
+  KEY `FKk8qrwowg31kx7hp93sru1pdqa` (`project_id`),
+  CONSTRAINT `FK4amgamieqvrq9ej2wy2oe6878` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`UserID`),
+  CONSTRAINT `FKk8qrwowg31kx7hp93sru1pdqa` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
+  CONSTRAINT `FKr7ydi8q6e7u0b6qmj9an9x8a` FOREIGN KEY (`assigned_by`) REFERENCES `users` (`UserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `task`
+--
+
+LOCK TABLES `task` WRITE;
+/*!40000 ALTER TABLE `task` DISABLE KEYS */;
+/*!40000 ALTER TABLE `task` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -235,8 +298,9 @@ CREATE TABLE `users` (
   UNIQUE KEY `Email` (`Email`),
   KEY `fk_role` (`RoleID`),
   CONSTRAINT `fk_role` FOREIGN KEY (`RoleID`) REFERENCES `roles` (`RoleID`),
+  CONSTRAINT `fk_roleid` FOREIGN KEY (`RoleID`) REFERENCES `roles` (`RoleID`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`RoleID`) REFERENCES `roles` (`RoleID`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -245,7 +309,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (18,'Tushar Lohar','tushar.lohar@example.com','Tushar@123',1),(19,'Shushen Gajare','shushen.gajare@example.com','Shushen@123',2),(20,'Abhishek Andhale','abhishek.andhale@example.com','Abhishek@123',3),(21,'Shubham Chakor','shubham.chakor@example.com','Shubham@123',3);
+INSERT INTO `users` VALUES (18,'Shubham Chakor','shubham@gmail.com','shubham@123',1),(19,'Sushen Gajare','sushen.gajare@gmail.com','Sushen@123',2),(20,'Abhishek Andhale','abhishek.andhale@example.com','Abhishek@123',3),(21,'Tushar Lohar','Tushar@gmail.com','tushar@123',3),(26,'ajay','ajay@gmail.com','Xyz@1245',3),(33,'Manthan Bhome','manthan@gmail.com','manthan@123',4),(34,'abc','abc@gmail.com','abc',3),(35,'shreyash','shreyash@gmail.com','12345',4);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -258,4 +322,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-02 19:15:29
+-- Dump completed on 2025-01-06 14:30:12

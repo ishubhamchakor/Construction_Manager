@@ -13,7 +13,7 @@ function Home() {
             <li><a href="/project">Projects</a></li>
             <li><a href="#">Team</a></li>
             <li><a href="/login">Login</a></li>
-            <li><a href="register">Register</a></li>
+            {/* <li><a href="register">Register</a></li> */}
           </ul>
         </nav>
 
@@ -24,7 +24,7 @@ function Home() {
               <p>Optimize your construction projects with advanced tools and real-time updates. Manage your team effectively and streamline your workflow for maximum efficiency.</p>
               <div className="cta-buttons">
                 <Link to="/login" className="cta-button">Login</Link>
-                <Link to="/register" className="cta-button">Register</Link>
+                {/* <Link to="/register" className="cta-button">Register</Link> */}
               </div>
             </div>
           </section>

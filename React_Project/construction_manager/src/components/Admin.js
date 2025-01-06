@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
-import ProjectRegistration from './ProjectRegistration'; // Import the ProjectRegistration component
+// import axios from 'axios';
+import ProjectRegistration from './ProjectRegistration'; // Importing the ProjectRegistration component
 
 const AdminDashboard = () => {
   const [user, setUser] = useState(null);

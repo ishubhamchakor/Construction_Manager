@@ -1,6 +1,8 @@
 package com.example.demo.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -11,7 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,10 +40,14 @@ public class User {
 	 	@Column(name="Password",nullable = false)
 	    private String password;
 	    
+
 	 	 @ManyToOne(fetch = FetchType.LAZY)
 	     @JoinColumn(name = "RoleID", referencedColumnName = "RoleID",nullable = false) // Foreign key mapping
 	 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "users"})
 	     private Role role;
+	 	 
+	 	 @OneToMany(mappedBy = "managedBy", fetch = FetchType.LAZY)
+	     private Set<Project> projects ;
 	 	 
 	 	   
 }

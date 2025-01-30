@@ -52,6 +52,7 @@ public class UserServices {
     public Optional<User> loginUser(String email, String password) {
         Optional<User> user = urepo.findByEmail(email);
         if (user.isPresent() && user.get().getPassword().equals(password)) {
+        
             return user;  // Return the user if login is successful
         }
         return Optional.empty();  // Return empty if user not found or credentials invalid

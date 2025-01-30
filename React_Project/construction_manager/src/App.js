@@ -23,7 +23,6 @@ function App() {
       <Route path="/siteEngineer" element={<SiteEngineer />} />
       <Route path="/Client" element={<Client />} />
       <Route path="/project" element={<Projects />} />
-      <Route path="/project" element={<Projects />} />
       <Route path="/raiseIssue" element={<RaiseIssue />} />
     </Routes>
   );

@@ -15,8 +15,7 @@ import com.example.demo.entities.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	    Optional<User> findByEmail(String email);
-	
 
-	int countByName(String name);
+		Optional<User> findById(int userId);
 	
 }

@@ -20,58 +20,66 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
   useEffect(() => {
     if (existingProject) {
       setFormData({
-        projectId: existingProject.projectId,
-        name: existingProject.name,
-        description: existingProject.description,
-        startDate: existingProject.startDate,
-        endDate: existingProject.endDate,
-        userId: existingProject.userId,
-        file: null,
-        status: existingProject.status,
+        projectId: existingProject.projectId || '',
+        name: existingProject.name || '',
+        description: existingProject.description || '',
+        startDate: existingProject.startDate || '',
+        endDate: existingProject.endDate || '',
+        userId: existingProject.userId || '',
+        file: null, // Reset file input when editing
+        status: existingProject.status || '',
       });
     }
   }, [existingProject]);
 
+  // Handle form input changes
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
-    });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Handle file input separately
+  const handleFileChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      file: e.target.files[0],
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const projectData = {
-      projectId: formData.projectId || null,
-      name: formData.name,
-      description: formData.description,
-      startDate: formData.startDate,
-      endDate: formData.endDate,
-      userId: formData.userId,
-      status: formData.status,
-    };
-  
+
+    // Create a FormData object to send project data along with the file
+    const form = new FormData();
+    form.append('name', formData.name);
+    form.append('description', formData.description);
+    form.append('startDate', formData.startDate);
+    form.append('endDate', formData.endDate);
+    form.append('status', formData.status);
+    form.append('managedBy', formData.userId);
+    if (formData.file) {
+      form.append('file', formData.file);
+    }
+
     try {
-      const response = await axios.post('http://localhost:1111/projects/newProject', projectData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await axios.post('http://localhost:1111/projects/newProject', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
+
       if (response.status === 200) {
-        setSuccessMessage('Project registered/updated successfully');
-        setErrorMessage('');
-        //onClose();
+        setSuccessMessage("Project registered/updated successfully");
+        setErrorMessage("");
       } else {
-        throw new Error('Failed to register/update project');
+        throw new Error("Failed to register/update project");
       }
     } catch (error) {
-      setErrorMessage('Error registering/updating project: ' + error.message);
-      setSuccessMessage('');
+      setErrorMessage("Error registering/updating project: " + error.message);
+      setSuccessMessage("");
     }
   };
-  
 
   return (
     <main className="container mt-5">
@@ -81,42 +89,90 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
         {successMessage && <div className="alert alert-success">{successMessage}</div>}
         {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
-        <form onSubmit={handleSubmit} >
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Name:</label>
-            <input type="text" name="name" className="form-control" value={formData.name} onChange={handleChange} required />
+            <input
+              type="text"
+              name="name"
+              className="form-control"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label>Description:</label>
-            <textarea name="description" className="form-control" value={formData.description} onChange={handleChange} required></textarea>
+            <textarea
+              name="description"
+              className="form-control"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            ></textarea>
           </div>
           <div className="form-group">
             <label>Start Date:</label>
-            <input type="date" name="startDate" className="form-control" value={formData.startDate} onChange={handleChange} required />
+            <input
+              type="date"
+              name="startDate"
+              className="form-control"
+              value={formData.startDate}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label>End Date:</label>
-            <input type="date" name="endDate" className="form-control" value={formData.endDate} onChange={handleChange} required />
+            <input
+              type="date"
+              name="endDate"
+              className="form-control"
+              value={formData.endDate}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label>Managed By (User ID):</label>
-            <input type="text" name="userId" className="form-control" value={formData.userId} onChange={handleChange} required />
+            <input
+              type="text"
+              name="userId"
+              className="form-control"
+              value={formData.userId}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label>File Attachment:</label>
-            <input type="file" name="file" className="form-control" onChange={handleChange} />
+            <input
+              type="file"
+              name="file"
+              className="form-control"
+              onChange={handleFileChange}
+            />
           </div>
           <div className="form-group">
             <label>Status:</label>
-            <select name="status" className="form-control" value={formData.status} onChange={handleChange}>
+            <select
+              name="status"
+              className="form-control"
+              value={formData.status}
+              onChange={handleChange}
+            >
               <option value="">Select status</option>
               <option value="ongoing">Ongoing</option>
               <option value="completed">Completed</option>
               <option value="pending">Pending</option>
             </select>
           </div>
-          <button type="submit" className="btn btn-primary">Register/Update Project</button>
-          <button type="button" className="btn btn-secondary ml-2" onClick={onClose}>Cancel</button>
+          <button type="submit" className="btn btn-primary">
+            Register/Update Project
+          </button>
+          <button type="button" className="btn btn-secondary ml-2" onClick={onClose}>
+            Cancel
+          </button>
         </form>
       </section>
     </main>

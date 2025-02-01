@@ -65,7 +65,7 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:1111/projects/newProject', form, {
+      const response = await axios.post('http://localhost:8173/projects/newProject', form, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 

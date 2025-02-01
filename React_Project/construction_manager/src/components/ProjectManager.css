@@ -1,0 +1,5 @@
+.heading {
+    color: white; /* Change text color if needed */
+    font-weight: bold; /* Make the header bold */
+    margin-bottom: 0; /* Remove bottom margin to align with the content */
+  }

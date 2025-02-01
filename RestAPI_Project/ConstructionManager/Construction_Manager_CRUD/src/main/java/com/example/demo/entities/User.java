@@ -35,4 +35,7 @@ public class User {
   @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "users"})
   private Role role;
 
+  @OneToMany(mappedBy = "managedBy", fetch = FetchType.LAZY)
+  @JsonManagedReference // Manages the reference properly during JSON serialization
+  private Set<Project> projects;
 }

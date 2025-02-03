@@ -70,13 +70,13 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
       });
 
       if (response.status === 200) {
-        setSuccessMessage("Project registered/updated successfully");
+        setSuccessMessage("Project registered successfully");
         setErrorMessage("");
       } else {
-        throw new Error("Failed to register/update project");
+        throw new Error("Failed to register project");
       }
     } catch (error) {
-      setErrorMessage("Error registering/updating project: " + error.message);
+      setErrorMessage("Error registering project: " + error.message);
       setSuccessMessage("");
     }
   };
@@ -84,12 +84,12 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
   return (
     <main className="container mt-5">
       <section className="registration">
-        <h2 className="text-center mb-4 text-primary">Register/Update Project</h2>
+        <h2 className="text-center mb-4 text-primary">Register Project</h2>
 
         {successMessage && <div className="alert alert-success">{successMessage}</div>}
         {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="horizontal-form">
           <div className="form-group">
             <label>Name:</label>
             <input
@@ -167,14 +167,36 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
               <option value="pending">Pending</option>
             </select>
           </div>
-          <button type="submit" className="btn btn-primary">
-            Register/Update Project
-          </button>
-          <button type="button" className="btn btn-secondary ml-2" onClick={onClose}>
-            Cancel
-          </button>
+          <div className="form-buttons">
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+            <button type="button" className="btn btn-secondary ml-2" onClick={onClose}>
+              Cancel
+            </button>
+          </div>
         </form>
       </section>
+
+      <style jsx>{`
+        .horizontal-form {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .form-group {
+          flex: 1 1 45%; /* Adjust width as necessary */
+          margin-right: 20px;
+          margin-bottom: 20px;
+        }
+        .form-buttons {
+          display: flex;
+          justify-content: flex-start;
+          width: 100%;
+        }
+        .form-buttons button {
+          margin-right: 10px; /* Space between buttons */
+        }
+      `}</style>
     </main>
   );
 };

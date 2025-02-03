@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.demo.entities.Tasks;
 import com.example.demo.repository.TaskRepository;
 
 @Service
-public class TaskServices {
+public class TasksService {
 	
 	@Autowired
 	TaskRepository repo ;

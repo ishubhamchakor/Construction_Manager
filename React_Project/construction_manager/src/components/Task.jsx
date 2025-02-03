@@ -1,157 +1,213 @@
-import React, { useState } from "react";
-import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState } from 'react';
+import axios from 'axios';
 
-const Task = ({ baseURL, onClose }) => {
-  const [taskData, setTaskData] = useState({
-    taskName: "",
-    description: "",
-    startDate: "",
-    dueDate: "",
-    priority: "",
-    status: "",
-    assignedTo: "",
-    file: null,
-  });
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setTaskData({
-      ...taskData,
-      [name]: files ? files[0] : value,
+const Task = ({ onClose, projectId }) => {
+    const [formData, setFormData] = useState({
+        taskname: '',
+        description: '',
+        startdate: '',
+        duedate: '',
+        priority: '',
+        status: '',
+        assignedto: '',
+        assignedby: '',
+        fileattachment: null
     });
-  };
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    for (const key in taskData) {
-      formData.append(key, taskData[key]);
-    }
+    const handleChange = (e) => {
+        const { name, value, type, files } = e.target;
+        if (type === 'file') {
+            setFormData({
+                ...formData,
+                [name]: files[0] // Set the first file if multiple files are not supported
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value
+            });
+        }
+    };
 
-    try {
-      await axios.post(`${baseURL}/tasks`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      alert("✅ Task created successfully!");
-      onClose(); // Hide the form after submitting
-    } catch (error) {
-      console.error("❌ Error creating task:", error);
-    }
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // Prevent page reload
 
-  return (
-    <section className="mt-4 p-4 bg-light border rounded">
-      <h4 className="mb-4 text-center">📝 Create New Task</h4>
-      <form onSubmit={handleSubmit}>
-        <div className="row">
-          <div className="col-md-6 mb-3">
-            <label className="form-label">Task Name:</label>
-            <input
-              type="text"
-              className="form-control"
-              name="taskName"
-              value={taskData.taskName}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        const task = {
+            taskname: formData.taskname,
+            description: formData.description,
+            startdate: formData.startdate,
+            duedate: formData.duedate,
+            priority: formData.priority,
+            status: formData.status,
+            assignedto: formData.assignedto,
+            assignedby: formData.assignedby,
+            projectId: projectId
+        };
 
-          <div className="col-md-6 mb-3">
-            <label className="form-label">Description:</label>
-            <textarea
-              className="form-control"
-              name="description"
-              value={taskData.description}
-              onChange={handleChange}
-              required
-            ></textarea>
-          </div>
+        const formDataToSend = new FormData();
+        formDataToSend.append('task', JSON.stringify(task));
 
-          <div className="col-md-6 mb-3">
-            <label className="form-label">Start Date:</label>
-            <input
-              type="date"
-              className="form-control"
-              name="startDate"
-              value={taskData.startDate}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        if (formData.fileattachment) {
+            formDataToSend.append('fileattachment', formData.fileattachment);
+        }
 
-          <div className="col-md-6 mb-3">
-            <label className="form-label">Due Date:</label>
-            <input
-              type="date"
-              className="form-control"
-              name="dueDate"
-              value={taskData.dueDate}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        try {
+            const response = await axios.post('http://localhost:8173/SaveTask', formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
 
-          <div className="col-md-6 mb-3">
-            <label className="form-label">Priority:</label>
-            <select
-              className="form-control"
-              name="priority"
-              value={taskData.priority}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select priority</option>
-              <option value="high">🔥 High</option>
-              <option value="medium">⚡ Medium</option>
-              <option value="low">🟢 Low</option>
-            </select>
-          </div>
+            if (response.status === 200) {
+                setSuccessMessage('Task created successfully!');
+                setErrorMessage(''); // Clear any previous errors
+            }
+        } catch (error) {
+            setSuccessMessage(''); // Clear any previous success messages
+            setErrorMessage('Error creating task. Please try again.');
+            console.error('Error creating task:', error.response ? error.response.data : error.message);
+        }
+    };
 
-          <div className="col-md-6 mb-3">
-            <label className="form-label">Status:</label>
-            <select
-              className="form-control"
-              name="status"
-              value={taskData.status}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select status</option>
-              <option value="beginning">🚀 Beginning</option>
-              <option value="ongoing">🔄 Ongoing</option>
-              <option value="completed">✅ Completed</option>
-            </select>
-          </div>
+    return (
+        <div className="container">
+            <h4>Create New Task</h4>
+            {successMessage && <div className="alert alert-success">{successMessage}</div>}
+            {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
-          <div className="col-md-6 mb-3">
-            <label className="form-label">Assigned To:</label>
-            <input
-              type="text"
-              className="form-control"
-              name="assignedTo"
-              value={taskData.assignedTo}
-              onChange={handleChange}
-              required
-              placeholder="Enter assignee name"
-            />
-          </div>
+            <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label htmlFor="taskname">Task Name</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="taskname"
+                        name="taskname"
+                        value={formData.taskname}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-          <div className="col-md-6 mb-3">
-            <label className="form-label">File Attachment:</label>
-            <input type="file" className="form-control" name="file" onChange={handleChange} />
-          </div>
+                <div className="form-group">
+                    <label htmlFor="description">Description</label>
+                    <textarea
+                        className="form-control"
+                        id="description"
+                        name="description"
+                        rows="3"
+                        value={formData.description}
+                        onChange={handleChange}
+                        required
+                    ></textarea>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="startdate">Start Date</label>
+                    <input
+                        type="date"
+                        className="form-control"
+                        id="startdate"
+                        name="startdate"
+                        value={formData.startdate}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="duedate">Due Date</label>
+                    <input
+                        type="date"
+                        className="form-control"
+                        id="duedate"
+                        name="duedate"
+                        value={formData.duedate}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="priority">Priority</label>
+                    <select
+                        className="form-control"
+                        id="priority"
+                        name="priority"
+                        value={formData.priority}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="status">Status</label>
+                    <select
+                        className="form-control"
+                        id="status"
+                        name="status"
+                        value={formData.status}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="assignedto">Assigned To</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="assignedto"
+                        name="assignedto"
+                        value={formData.assignedto}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="assignedby">Assigned By</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="assignedby"
+                        name="assignedby"
+                        value={formData.assignedby}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="fileattachment">File Attachment</label>
+                    <input
+                        type="file"
+                        className="form-control"
+                        id="fileattachment"
+                        name="fileattachment"
+                        onChange={handleChange}
+                    />
+                </div>
+
+                <button type="submit" className="btn btn-primary mt-3">
+                    Submit Task
+                </button>
+                <button type="button" className="btn btn-secondary mt-3 ml-2" onClick={onClose}>
+                    Cancel
+                </button>
+            </form>
         </div>
-
-        <div className="text-center mt-3">
-          <button type="submit" className="btn btn-success btn-lg">📤 Submit Task</button>
-          <button type="button" className="btn btn-secondary btn-lg ms-2" onClick={onClose}>❌ Clear</button>
-        </div>
-      </form>
-    </section>
-  );
+    );
 };
 
 export default Task;

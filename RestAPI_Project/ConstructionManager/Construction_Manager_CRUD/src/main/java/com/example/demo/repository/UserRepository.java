@@ -20,5 +20,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 		int countByName(String name);
 		
-	
 }

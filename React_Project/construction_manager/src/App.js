@@ -1,3 +1,4 @@
+import logo from './logo.svg';
 import Home from './components/Home';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
@@ -11,6 +12,7 @@ import Client from './components/Client';
 import Projects from './components/Projects';
 import { useSelector } from 'react-redux';
 import { RaiseIssue } from './components/RaiseIssue';
+import { TaskCreation } from './components/TaskCreation';
 
 function App() {
   return (
@@ -21,9 +23,11 @@ function App() {
       <Route path="/admin" element={< AdminLandingPage />} />
       <Route path="/projectManager" element={<Projectmanager />} />
       <Route path="/siteEngineer" element={<SiteEngineer />} />
-      <Route path="/Client" element={<Client />} />
+      {/* <Route path="/Client" element={<Client />} />
       <Route path="/project" element={<Projects />} />
-      <Route path="/raiseIssue" element={<RaiseIssue />} />
+      <Route path="/project" element={<Projects />} /> */}
+      <Route path="/raiseIssue/:id" element={<RaiseIssue />} />
+      <Route path='/taskCreation' element={<TaskCreation/>} />
     </Routes>
   );
 }

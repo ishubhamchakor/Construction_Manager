@@ -64,7 +64,5 @@ public class TaskServices {
 //		    return  repo.findTaskByProject_Id(id);
 		   return repo.findTaskByProject_Projectid(id);
 	   }
-	
-	
 
 }

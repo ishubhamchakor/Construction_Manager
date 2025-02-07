@@ -31,8 +31,8 @@ const AdminDashboard = () => {
             <div className="col-md-4">
               <div className="custom-card">
                 <div className="card-body">
-                  <h5 className="card-title">Create Users</h5>
-                  <p className="card-text">Easily add new users to the system.</p>
+                  <h5 className="card-title">Create Users</h5> 
+                  <p className="card-text">Easily add new users to the system.</p> 
                   <Link to="/register" className="btn btn-custom">User Registration</Link>
                 </div>
               </div>

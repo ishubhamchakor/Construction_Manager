@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -31,10 +32,10 @@ public class Tasks {
     private String description;
 
     @Column(name = "startdate")
-    private LocalDate startdate;
+    private Date startdate;
 
     @Column(name = "duedate")
-    private LocalDate duedate;
+    private Date duedate;
 
     @Column(name = "priority")
     private String priority;
@@ -70,3 +71,17 @@ public class Tasks {
     @JsonIgnore
     private List<Issues> issues;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -37,8 +37,8 @@ public class Project {
     @Column(name = "end_date", nullable = false)
     private Date endDate;
 
-    @Column(name = "status", length = 50, nullable = false)
-    private String status;
+//    @Column(name = "status", length = 50, nullable = false)
+//    private String status;
 
     @Lob
     @Column(name = "file_attachment", columnDefinition = "LONGBLOB")

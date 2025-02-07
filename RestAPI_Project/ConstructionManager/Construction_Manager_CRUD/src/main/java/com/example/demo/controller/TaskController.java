@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.demo.Dto.TasksaveDto;
 import com.example.demo.entities.Tasks;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,9 @@ public class TaskController {
 	}
    
    @PostMapping("/saveTask")
-   public String SaveTask(@RequestBody Tasks task) {
+   public String SaveTask(@RequestBody TasksaveDto task) {
+	   
+		
 	   return service.SaveTask(task);
    }
    

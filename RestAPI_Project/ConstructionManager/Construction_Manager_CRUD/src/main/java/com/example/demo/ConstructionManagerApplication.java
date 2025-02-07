@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ConstructionManagerCrudApplication {
+public class ConstructionManagerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ConstructionManagerCrudApplication.class, args);
+		SpringApplication.run(ConstructionManagerApplication.class, args);
 	}
 
 }

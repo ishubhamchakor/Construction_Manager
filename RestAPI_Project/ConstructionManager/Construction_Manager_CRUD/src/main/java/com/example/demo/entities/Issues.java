@@ -33,6 +33,9 @@ public class Issues {
 	@Column(name="issueid")
 	private int issueid;
 	
+	@Column(name="issue_name")
+	private String issue_name;
+	
 
 	@ManyToOne
     @JoinColumn(name = "raisedby", referencedColumnName = "UserID")
@@ -40,10 +43,8 @@ public class Issues {
 
 	
 	@ManyToOne
-    @JoinColumn(name = "taskid", nullable = false)
-	
+    @JoinColumn(name = "taskid")
     private Tasks task = new Tasks();
-;
 
 	@Column(name = "description",columnDefinition = "TEXT")
     private String description;

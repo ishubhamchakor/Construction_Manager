@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.Date;
+import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,40 +20,44 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 public class Project {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer projectID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "projectid") // ✅ Use snake_case for consistency
+    private Integer projectid;
 
-  @Column(name = "projectName", length = 255, nullable = false)
-  private String projectName;
+    @Column(name = "project_name", length = 255, nullable = false)
+    private String projectName;
 
-  @Column(columnDefinition = "TEXT", nullable = false)
-  private String description;
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
+    private String description;
 
-  @Column(name = "startDate", nullable = false)
-  private Date startDate;
+    @Column(name = "start_date", nullable = false)
+    private Date startDate;
 
-  @Column(name = "EndDate", nullable = false)
-  private Date endDate;
+    @Column(name = "end_date", nullable = false)
+    private Date endDate;
 
-  @Column(length = 50, nullable = false)
-  private String status;
+    @Column(name = "status", length = 50, nullable = false)
+    private String status;
 
-  @Lob
-  @Column(name = "file_attachment", columnDefinition = "LONGBLOB")
-  private byte[] fileAttachment;
+    @Lob
+    @Column(name = "file_attachment", columnDefinition = "LONGBLOB")
+    private byte[] fileAttachment;
 
-  @ManyToOne(fetch = FetchType.LAZY) 
-  @JoinColumn(name = "ManagedBy", referencedColumnName = "UserID", nullable = false)
-  @JsonBackReference // Prevents recursion during JSON serialization
-  private User managedBy;
-  
-//✅ Added mapping for CreatedBy
- @ManyToOne(fetch = FetchType.LAZY)
- @JoinColumn(name = "CreatedBy", referencedColumnName = "UserID", nullable = true)
- @JsonBackReference
- private User createdBy;
+    // ✅ ManagedBy Relationship (Many Projects can be managed by One User)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "managed_by")
+    private User managedBy;
+    
+//    // ✅ CreatedBy Relationship (Many Projects can be created by One User)
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "created_by", referencedColumnName = "UserID", nullable = true)
+//    private User createdBy;
+
+    // ✅ One project can have many tasks
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+//    @JoinColumn(name = "taskid", nullable = false)
+    private List<Tasks> tasks;
 }
-
-
-

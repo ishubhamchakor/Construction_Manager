@@ -1,10 +1,13 @@
 package com.example.demo.entities;
 
+
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +31,7 @@ public class Role {
 	@Column(nullable = false)
     private Integer RoleID;
   	
-  	@Column(name="RoleName",nullable = false)
+  	@Column(name="role_name",nullable = false)
     private String name;
   	
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)

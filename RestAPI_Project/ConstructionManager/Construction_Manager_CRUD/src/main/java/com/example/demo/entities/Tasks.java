@@ -3,6 +3,7 @@ package com.example.demo.entities;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,46 +20,52 @@ import lombok.Setter;
 public class Tasks {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Matches MySQL AUTO_INCREMENT
-    @Column(name = "taskid")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "taskid") // ✅ Consistent naming
+    private Long taskid;
 
-    @Column(name = "taskname")
+    @Column(name = "taskname") // ✅ Ensure not null
     private String taskname;
 
-    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "startdate")
     private LocalDate startdate;
- 
-    
+
     @Column(name = "duedate")
     private LocalDate duedate;
 
-    @Column(name = "priority", nullable = false, length = 50)
+    @Column(name = "priority")
     private String priority;
 
-    @Column(name = "status", nullable = false, length = 50)
+    @Column(name = "status")
     private String status;
 
-    @ManyToOne
-    @JoinColumn(name = "assignedto", referencedColumnName = "UserID")
-    private User assignedto;
+//    // ✅ Task assigned to a user
+//    @ManyToOne
+//    @JoinColumn(name = "assignedto", referencedColumnName = "UserID")
+//    @JsonIgnore
+//    private User assignedto;
 
-    @ManyToOne
-    @JoinColumn(name = "assignedby", referencedColumnName = "UserID")
-    private User assignedby;
+//    // ✅ Task assigned by a user
+//    @ManyToOne
+//    @JoinColumn(name = "assignedby", referencedColumnName = "UserID")
+//    private User assignedby;
 
     @Lob
     @Column(name = "fileattachment", columnDefinition = "BLOB")
+    @JsonIgnore
     private byte[] fileattachment;
 
+    // ✅ Many tasks belong to one project
     @ManyToOne
-    @JoinColumn(name = "projectid", referencedColumnName = "projectid") // ✅ Correct: References ProjectID
-    @JsonIgnore
-    private Project project;
+    @JoinColumn(name = "projectid", referencedColumnName = "projectid") 
     
+    @JsonIgnore 
+    private Project project;
+
+    // ✅ A task can have multiple issues
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Issues> issues;

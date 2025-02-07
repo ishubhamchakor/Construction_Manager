@@ -35,10 +35,6 @@ export const TaskCreation = () => {
      
         try {
             // API request to create a new task
-   
-
-
-
             const response = await axios.post("http://localhost:8173/saveTask", formData, {
                 headers: {
                     'Content-Type': 'application/json' // Set Content-Type to application/json

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { TaskInformationModel } from "./TaskInformationModel";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Navbar } from "./Navbar";
 
 const SiteEngineer = () => {
   const [allProjects, setAllProjects] = useState([]);
@@ -61,6 +62,7 @@ const SiteEngineer = () => {
 
   return (
     <>
+      <Navbar />
       <div className="text-center p-3 sticky-top">
         <h2 className="mb-4 text-primary mt-4">Welcome Site Engineer Dashboard!</h2>
       </div>

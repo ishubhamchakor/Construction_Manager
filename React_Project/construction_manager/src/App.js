@@ -23,9 +23,8 @@ function App() {
       <Route path="/admin" element={< AdminLandingPage />} />
       <Route path="/projectManager" element={<Projectmanager />} />
       <Route path="/siteEngineer" element={<SiteEngineer />} />
-      {/* <Route path="/Client" element={<Client />} />
+      <Route path="/Client" element={<Client />} />
       <Route path="/project" element={<Projects />} />
-      <Route path="/project" element={<Projects />} /> */}
       <Route path="/raiseIssue/:id" element={<RaiseIssue />} />
       <Route path='/taskCreation' element={<TaskCreation/>} />
     </Routes>

@@ -29,7 +29,7 @@ public class ProjectServices {
 
     public Project registerProject(String projectName, String description, 
                                    String startDate, String endDate, 
-                                   String status, Integer managedBy, 
+                                   Integer managedBy, 
                                    MultipartFile file) throws IOException {
 
         // Fetch User by managedBy (userID)
@@ -41,7 +41,7 @@ public class ProjectServices {
         project.setDescription(description);
         project.setStartDate(java.sql.Date.valueOf(startDate));
         project.setEndDate(java.sql.Date.valueOf(endDate));
-        project.setStatus(status);
+        //project.setStatus(status);
         project.setManagedBy(manager);
         project.setFileAttachment(file != null ? file.getBytes() : null);
 

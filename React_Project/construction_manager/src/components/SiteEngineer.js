@@ -18,7 +18,7 @@ const SiteEngineer = () => {
 
   const fetchAllProject = () => {
     axios
-      .get("http://localhost:1111/api/getAllProject")
+      .get("http://localhost:8173/api/getAllProject")
       .then((response) => {
         setAllProjects(response.data);
         console.log("Projects fetched:", response.data);
@@ -38,7 +38,7 @@ const SiteEngineer = () => {
 
   const fetchtaskByProjectId = () => {
     axios
-      .get(`http://localhost:1111/getAllTaskprojectbyId/${selectedProject}`)
+      .get(`http://localhost:8173/getAllTaskprojectbyId/${selectedProject}`)
       .then((response) => {
         console.log("Fetched tasks:", response.data);
         setAlltasks(response.data);

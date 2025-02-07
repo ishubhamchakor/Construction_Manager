@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Import useLocation
+import { useSelector } from "react-redux";
 
 export const TaskCreation = () => {
-    // React Router navigation
     const navigate = useNavigate();
+    const projectid = useSelector((state) => state.project.projectId); // Access projectId from Redux store
+     // Destructure projectid from state
 
     // State for task form data
     const [formData, setFormData] = useState({
         taskname: "",   // Task Name
         description: "", // Task Description
-        startdate: "",
-        duedate: "",
-        priority: "",
-        file: null,
+        startdate: "",  // Start Date
+        duedate: "",    // Due Date
+        priority: "",   // Task Priority
+        file: null,     // File attachment (if any)
+        projectid: projectid // Directly sending project ID as an integer
     });
-
     // Handle input changes (text, date, and file inputs)
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -29,29 +31,30 @@ export const TaskCreation = () => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Prepare FormData for file upload
-        const data = new FormData();
-        Object.keys(formData).forEach((key) => {
-            if (formData[key]) {
-                data.append(key, formData[key]);
-            }
-        });
-
-        // ✅ Debugging: Log FormData Contents
-        console.log("FormData contains:");
-        for (let pair of data.entries()) {
-            console.log(pair[0] + ": ", pair[1]);
-        }
-
+    
+     
         try {
-            // API request to create a new project
-            await axios.post("http://localhost:8173/saveTask", data, {
-                headers: { "Content-Type": "application/json" },
+            // API request to create a new task
+   
+
+
+
+            const response = await axios.post("http://localhost:8173/saveTask", formData, {
+                headers: {
+                    'Content-Type': 'application/json' // Set Content-Type to application/json
+                }
             });
 
-            alert("Task created successfully!");
-            navigate("/projectManager"); // Redirect after successful creation
+  console.log(response.data)
+
+            // No need to set Content-Type header
+            // Check if the response is successful
+            if (response.status === 200 || response.status === 201) {
+                alert("Task created successfully!");
+                navigate("/projectManager"); // Redirect after successful creation
+            } else {
+                alert("Failed to create task. Please try again.");
+            }
         } catch (error) {
             console.error("Error creating task:", error);
             alert("Failed to create task. Please try again.");

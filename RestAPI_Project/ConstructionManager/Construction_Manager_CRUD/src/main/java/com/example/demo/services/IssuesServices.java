@@ -38,8 +38,12 @@ public class IssuesServices {
 	public List<Issues> getIssues() {
 		return repo.findAll();
 	}
-	public Optional<Issues> getIssuesByProjectId(int id) {
-		return  repo.findById(id);
-	}
-		
+	
+	
+	 public Optional<List<Issues>> getIssuesByTasksId(int taskId) {
+	        return Optional.of(repo.findByTask_Taskid(taskId)); // Fetch issues from the repository
+	    }
 }
+
+
+

@@ -8,8 +8,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import AdminLandingPage from './components/Admin';
 import Projectmanager from './components/ProjectManager';
 import SiteEngineer from './components/SiteEngineer';
-import Client from './components/Client';
-import Projects from './components/Projects';
 import { useSelector } from 'react-redux';
 import { RaiseIssue } from './components/RaiseIssue';
 import { TaskCreation } from './components/TaskCreation';
@@ -23,8 +21,6 @@ function App() {
       <Route path="/admin" element={< AdminLandingPage />} />
       <Route path="/projectManager" element={<Projectmanager />} />
       <Route path="/siteEngineer" element={<SiteEngineer />} />
-      <Route path="/Client" element={<Client />} />
-      <Route path="/project" element={<Projects />} />
       <Route path="/raiseIssue/:id" element={<RaiseIssue />} />
       <Route path='/taskCreation' element={<TaskCreation/>} />
     </Routes>

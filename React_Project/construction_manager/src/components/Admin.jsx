@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProjectRegistration from './ProjectRegistration'; // Importing the ProjectRegistration component
-import './Admin.css'; // External CSS file
 
 const AdminDashboard = () => {
   const [showProjectForm, setShowProjectForm] = useState(false);
@@ -16,29 +15,105 @@ const AdminDashboard = () => {
   };
 
   return (
-
     <div className="m-5">
+      <style>{`
+        .welcome-section h2 {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .custom-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #007bff;
+        }
+
+        .card-text {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .btn-custom {
+            width: 100%;
+            background-color: #f0ad4e;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #ec971f;
+            color: white;
+        }
+
+        .report-form {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+
+        @media (max-width: 768px) {
+            .custom-card {
+                padding: 20px;
+            }
+            .btn-custom {
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .content-area {
+                padding: 20px;
+            }
+            .custom-card {
+                padding: 15px;
+            }
+        }
+      `}</style>
+
       {!showProjectForm && !showReportForm ? (
         <>
-          {/* Welcome Message */}
           <div className="text-center welcome-section mt-5 mb-5">
             <h2 className="text-primary">Welcome, Admin!</h2>
           </div>
 
-          {/* Cards Section */}
-          <div className="row ">
-            {/* User Management */}
+          <div className="row">
             <div className="col-md-4">
               <div className="custom-card">
                 <div className="card-body">
-                  <h5 className="card-title">Create Users</h5> 
-                  <p className="card-text">Easily add new users to the system.</p> 
+                  <h5 className="card-title">Create Users</h5>
+                  <p className="card-text">Easily add new users to the system.</p>
                   <Link to="/register" className="btn btn-custom">User Registration</Link>
                 </div>
               </div>
             </div>
 
-            {/* Project Registration */}
             <div className="col-lg-4 col-md-6 mb-4">
               <div className="custom-card">
                 <div className="card-body">
@@ -49,7 +124,6 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            {/* Generate Report */}
             <div className="col-lg-4 col-md-6 mb-4">
               <div className="custom-card">
                 <div className="card-body">
@@ -70,7 +144,6 @@ const AdminDashboard = () => {
         </div>
       )}
     </div>
-
   );
 };
 

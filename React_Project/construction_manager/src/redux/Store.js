@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import store from './redux/Store'; // Ensure the casing matches
+
 // Import reducers (only once for each)
 import authReducer from './Slice/authSlice';
 import projectReducer from './Slice/projectReducer';

@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import "./SiteEngineer.css";
 import { TaskInformationModel } from "./TaskInformationModel";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Navbar } from "./Navbar";
 
 const SiteEngineer = () => {
   const [allProjects, setAllProjects] = useState([]);
@@ -62,7 +62,8 @@ const SiteEngineer = () => {
 
   return (
     <>
-      <div className="  text-center p-3 sticky-top">
+      <Navbar />
+      <div className="text-center p-3 sticky-top">
         <h2 className="mb-4 text-primary mt-4">Welcome Site Engineer Dashboard!</h2>
       </div>
 
@@ -126,6 +127,70 @@ const SiteEngineer = () => {
       </div>
 
       {selectedTask && <TaskInformationModel selectedTask={selectedTask} />}
+
+      {/* CSS Inside JSX */}
+      <style>{`
+        body {
+          background-color: #f7f9fc;
+          font-family: 'Arial', sans-serif;
+        }
+
+        .heading {
+          color: #ffffff;
+          font-size: 2rem;
+          font-weight: bold;
+          font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        .card {
+          background: #ffffff;
+          border: 1px solid #eaeaea;
+          border-radius: 15px;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+
+        .card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+          cursor: pointer;
+        }
+
+        .card-title {
+          color: #0056b3;
+          font-weight: bold;
+          font-family: auto;
+        }
+
+        .task-title {
+          font-size: 1.2rem;
+          color: #555555;
+          font-family: system-ui;
+        }
+
+        /* Grid styles */
+        .container {
+          max-width: 1200px;
+        }
+
+        .row {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
+        .col-md-4 {
+          flex: 0 0 33.333%;
+          max-width: 33.333%;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+          .col-md-4 {
+            flex: 0 0 100%;
+            max-width: 100%;
+          }
+        }
+      `}</style>
     </>
   );
 };

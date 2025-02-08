@@ -8,14 +8,13 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
     description: '',
     startDate: '',
     endDate: '',
-    userId: '', // Managed by User ID
+    userId: '',
     file: null,
   });
 
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Populate form with existing project data if editing
   useEffect(() => {
     if (existingProject) {
       setFormData({
@@ -25,13 +24,12 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
         startDate: existingProject.startDate || '',
         endDate: existingProject.endDate || '',
         userId: existingProject.userId || '',
-        file: null, // Reset file input when editing
+        file: null,
         status: existingProject.status || '',
       });
     }
   }, [existingProject]);
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -40,7 +38,6 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
     }));
   };
 
-  // Handle file input separately
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -50,8 +47,6 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Create a FormData object to send project data along with the file
     const form = new FormData();
     form.append('name', formData.name);
     form.append('description', formData.description);
@@ -80,9 +75,9 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
   };
 
   return (
-    <main className="container mt-5">
+    <main className="project-registration-container">
       <section className="registration">
-        <h2 className="text-center mb-4 text-primary">Register/Update Project</h2>
+        <h2 className="text-center mb-4 text-primary">Register Project</h2>
 
         {successMessage && <div className="alert alert-success">{successMessage}</div>}
         {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
@@ -100,8 +95,6 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
             />
           </div>
 
-          <br/>
-
           <div className="form-group">
             <label>Description:</label>
             <textarea
@@ -112,8 +105,6 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
               required
             ></textarea>
           </div>
-
-          <br/>
 
           <div className="form-group">
             <label>Start Date:</label>
@@ -127,8 +118,6 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
             />
           </div>
 
-          <br/>
-
           <div className="form-group">
             <label>End Date:</label>
             <input
@@ -140,8 +129,6 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
               required
             />
           </div>
-
-          <br/>
 
           <div className="form-group">
             <label>Managed By (User ID):</label>
@@ -155,8 +142,6 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
             />
           </div>
 
-          <br/>
-
           <div className="form-group">
             <label>File Attachment:</label>
             <input
@@ -165,36 +150,71 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
               className="form-control"
               onChange={handleFileChange}
             />
-           </div>
+          </div>
 
-          {/*<div className="form-group">
-            <label>Status:</label>
-            <select
-              name="status"
-              className="form-control"
-              value={formData.status}
-              onChange={handleChange}
-            >
-              <option value="">Select status</option>
-              <option value="ongoing">Ongoing</option>
-              <option value="completed">Completed</option>
-              <option value="pending">Pending</option>
-            </select>
-          </div> */}
           <div className='d-flex justify-content-between'>
-            <div>
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-            </div>
-          <div>
-            <button type="button" className="btn btn-secondary ml-2" onClick={onClose}>
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={onClose}>
               Cancel
             </button>
-            </div>
           </div>
         </form>
       </section>
+
+      <style jsx>{`
+        body {
+          background-color: #f4f4f4;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+
+        .project-registration-container {
+          width: 500px;
+          background: white;
+          padding: 30px;
+          border-radius: 15px;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .registration h2 {
+          text-align: center;
+          color: #007bff;
+        }
+
+        .form-group {
+          margin-bottom: 15px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+        }
+
+        .btn-primary {
+          background-color: #007bff;
+          border: none;
+          padding: 10px 15px;
+          color: white;
+          border-radius: 8px;
+          cursor: pointer;
+        }
+
+        .btn-secondary {
+          background-color: #6c757d;
+          border: none;
+          padding: 10px 15px;
+          color: white;
+          border-radius: 8px;
+          cursor: pointer;
+        }
+      `}</style>
     </main>
   );
 };

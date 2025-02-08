@@ -1,9 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
+
 import authReducer from  './Slice/authSlice'; // Correct the import to match the usage below
-<<<<<<< Updated upstream
+
 import projectReducer from './Slice/projectReducer';
-=======
->>>>>>> Stashed changes
+
+import authReducer from '../redux/Slice/authSlice'; // Correct the import to match the usage below
+import projectReducer from '../redux/Slice/projectReducer';
+
 
 const store = configureStore({
   reducer: {

@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +33,18 @@ public class IssuesController {
 		return iservice.getIssues();
 	}
 	
-//	@GetMapping("/viewIssuesbyprojectId/{projectId}")
-//	public List<Issues> getIssuesByProjectId(@PathVariable int id ) {
-//		return iservice.getIssues();
-//	}
+
+	//change here only for  issue functionality
+	
+	@GetMapping("/task_Issues/{id}")
+	public ResponseEntity<List<Issues>> getIssuesByTaskId(@PathVariable int id) {
+	    Optional<List<Issues>> issues = iservice.getIssuesByTasksId(id);
+	    
+	    if (issues.isPresent() && !issues.get().isEmpty()) {
+	        return ResponseEntity.ok(issues.get()); // Return 200 OK with the list of issues
+	    } else {
+	        return ResponseEntity.noContent().build(); // Return 204 No Content if no issues found
+	    }
+	}		
+	
 }

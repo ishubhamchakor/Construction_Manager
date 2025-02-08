@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 
 import com.example.demo.Dto.TasksaveDto;
 import com.example.demo.entities.Tasks;
@@ -32,11 +33,28 @@ public class TaskController {
 	   return service.SaveTask(task);
    }
    
+   
+   // for site-engineer 
+   
    @GetMapping("/getAllTaskprojectbyId/{id}")
    public List<Tasks> findTaskByProject_Projectid(@PathVariable int id){
 	   System.out.println("i am here"+id);
 	   return  service.findTaskByProject_Projectid(id);
 
    }
-    
+   
+   
+   //change below code only for issue functionality
+   
+   @GetMapping("/projectTask/{id}")
+   public ResponseEntity<List<Tasks>> getTasksByProjectId(@PathVariable("id") int id) {
+       System.out.println("Received project ID: " + id); // Log the received ID
+       List<Tasks> tasks = service.findTaskByProject_Projectid(id);
+       if (tasks.isEmpty()) {
+           return ResponseEntity.noContent().build(); // Return 204 No Content if no tasks found
+       }
+       return ResponseEntity.ok(tasks); // Return 200 OK with the list of tasks
+   }
+   
+       
 }

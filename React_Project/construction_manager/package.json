@@ -6,6 +6,7 @@
     "@reduxjs/toolkit": "^2.5.0",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
+    "cors": "^2.8.5",
     "cra-template": "1.2.0",
     "cross-env": "^7.0.3",
     "lucide-react": "^0.475.0",
@@ -13,8 +14,8 @@
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^7.1.1",
-    "react-scripts": "5.0.1",
+    "react-router-dom": "^7.1.5",
+    "react-scripts": "^5.0.1",
     "redux": "^5.0.1",
     "web-vitals": "^4.2.4"
   },

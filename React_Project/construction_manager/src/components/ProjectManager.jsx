@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { setProjectId } from "../redux/Slice/projectActions";
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector } from "react-redux";
 import TaskShowModel from "./TaskShowModel";
 import SelectTaskProject from './SelectTaskProject';
 import ProjectsDetailsModel from "./ProjectsDetailsModel";
@@ -16,13 +16,19 @@ const ProjectManager = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+
+
+  const authState = useSelector((state) => state.auth);
+  const userID = authState.user ? authState.user.uid : null;
+
+
   useEffect(() => {
     fetchAllProjects();
   }, []);
 
   const fetchAllProjects = async () => {
     try {
-      const response = await axios.get("http://localhost:8173/api/getAllProject");
+      const response = await axios.get(`http://localhost:8173/api/managed-by/${userID}`);
       setProjects(response.data);
     } catch (error) {
       console.error("Error fetching projects:", error);

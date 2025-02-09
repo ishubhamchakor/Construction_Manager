@@ -3,7 +3,7 @@ import { TaskInformationModel } from "./TaskInformationModel";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Navbar } from "./Navbar";
-
+import { useSelector } from "react-redux";
 const SiteEngineer = () => {
   const [allProjects, setAllProjects] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -16,9 +16,15 @@ const SiteEngineer = () => {
     navigate(`/raiseIssue/${taskId}`);
   };
 
+
+  
+  const authState = useSelector((state) => state.auth);
+  const userID = authState.user ? authState.user.uid : null;
+
+
   const fetchAllProject = () => {
     axios
-      .get("http://localhost:8173/api/getAllProject")
+      .get(`http://localhost:8173/api/managed-by/${userID}`)
       .then((response) => {
         setAllProjects(response.data);
         console.log("Projects fetched:", response.data);

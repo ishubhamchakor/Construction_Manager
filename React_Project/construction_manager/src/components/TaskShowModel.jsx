@@ -29,7 +29,7 @@ const TaskShowModel = ({ setShowModal, selectedTask }) => {
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content">
               <div className="modal-header bg-primary text-white">
-                <h5 className="modal-title">Task Details</h5>
+                <h5 className="modal-title">Issue Details</h5>
                 <button type="button" className="btn-close" onClick={closeModal}></button>
               </div>
               <div className="modal-body">

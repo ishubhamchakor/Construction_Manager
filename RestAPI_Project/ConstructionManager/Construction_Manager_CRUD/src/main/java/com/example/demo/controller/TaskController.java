@@ -31,10 +31,7 @@ public class TaskController {
 	   
 		
 	   return service.SaveTask(task);
-   }
-   
-   
-   // for site-engineer 
+   } 
    
    @GetMapping("/getAllTaskprojectbyId/{id}")
    public List<Tasks> findTaskByProject_Projectid(@PathVariable int id){
@@ -42,10 +39,7 @@ public class TaskController {
 	   return  service.findTaskByProject_Projectid(id);
 
    }
-   
-   
-   //change below code only for issue functionality
-   
+ 
    @GetMapping("/projectTask/{id}")
    public ResponseEntity<List<Tasks>> getTasksByProjectId(@PathVariable("id") int id) {
        System.out.println("Received project ID: " + id); // Log the received ID
@@ -55,6 +49,5 @@ public class TaskController {
        }
        return ResponseEntity.ok(tasks); // Return 200 OK with the list of tasks
    }
-   
-       
+      
 }

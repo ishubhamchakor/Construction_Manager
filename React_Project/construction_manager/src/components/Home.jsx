@@ -7,13 +7,6 @@ function Home() {
     <div className="construction-bg" style={{ backgroundImage: `url(${constructImage})` }}>
       <header className="App-header">
         <h1>Construction Manager</h1>
-        <nav>
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="#">Team</a></li>
-            <li><a href="/login">Login</a></li>
-          </ul>
-        </nav>
       </header>
 
       <main className="App-main">

@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import com.example.demo.entities.Tasks;
 
 public interface TaskRepository extends JpaRepository<Tasks, Integer> {
-	
 	 
 //	 List<Tasks> getAllTaskByProjectId(int projectId);
 	

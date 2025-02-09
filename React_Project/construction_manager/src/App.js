@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import Home from './components/Home';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
@@ -8,9 +7,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import AdminLandingPage from './components/Admin';
 import Projectmanager from './components/ProjectManager';
 import SiteEngineer from './components/SiteEngineer';
-import { useSelector } from 'react-redux';
 import { RaiseIssue } from './components/RaiseIssue';
 import { TaskCreation } from './components/TaskCreation';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Navbar } from "./Navbar";
 
 export const RaiseIssue = () => {
   const { id } = useParams(); // Get ID from URL params

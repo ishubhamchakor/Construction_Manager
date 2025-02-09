@@ -1,90 +1,105 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const ProjectRegistration = ({ onClose, existingProject }) => {
   const [formData, setFormData] = useState({
-    projectId: '',
-    name: '',
-    description: '',
-    startDate: '',
-    endDate: '',
-    userId: '',
+    name: "",
+    description: "",
+    startDate: "",
+    endDate: "",
+    managedBy: "",
     file: null,
   });
 
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [managers, setManagers] = useState([]);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [validationError, setValidationError] = useState("");
 
   useEffect(() => {
+    axios
+      .get("http://localhost:8173/project-managers")
+      .then((response) => setManagers(response.data))
+      .catch(() => setErrorMessage("Failed to load project managers."));
+
     if (existingProject) {
       setFormData({
-        projectId: existingProject.projectId || '',
-        name: existingProject.name || '',
-        description: existingProject.description || '',
-        startDate: existingProject.startDate || '',
-        endDate: existingProject.endDate || '',
-        userId: existingProject.userId || '',
+        name: existingProject.name || "",
+        description: existingProject.description || "",
+        startDate: existingProject.startDate || "",
+        endDate: existingProject.endDate || "",
+        managedBy: existingProject.managedBy?.id || "",
         file: null,
-        status: existingProject.status || '',
       });
     }
   }, [existingProject]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setValidationError(""); // Clear validation errors on input change
+  };
+
+  const handleManagerChange = (e) => {
+    setFormData((prevData) => ({ ...prevData, managedBy: e.target.value }));
   };
 
   const handleFileChange = (e) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      file: e.target.files[0],
-    }));
+    setFormData((prevData) => ({ ...prevData, file: e.target.files[0] }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const form = new FormData();
-    form.append('name', formData.name);
-    form.append('description', formData.description);
-    form.append('startDate', formData.startDate);
-    form.append('endDate', formData.endDate);
-    form.append('managedBy', formData.userId);
-    if (formData.file) {
-      form.append('file', formData.file);
+
+    const today = new Date().toISOString().split("T")[0];
+
+    if (formData.startDate < today) {
+      setValidationError("Start date must be today or later.");
+      return;
     }
 
+    if (formData.endDate < formData.startDate) {
+      setValidationError("End date must be on or after the start date.");
+      return;
+    }
+
+    const form = new FormData();
+    form.append("name", formData.name);
+    form.append("description", formData.description);
+    form.append("startDate", formData.startDate);
+    form.append("endDate", formData.endDate);
+    form.append("managedBy", formData.managedBy);
+
     try {
-      const response = await axios.post('http://localhost:8173/api/newProject', form, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      const response = await axios.post("http://localhost:8173/api/newProject", form, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
       if (response.status === 200) {
-        setSuccessMessage("Project registered/updated successfully");
+        setSuccessMessage("Project registered successfully!");
         setErrorMessage("");
+        setValidationError("");
       } else {
-        throw new Error("Failed to register/update project");
+        throw new Error("Failed to register project");
       }
     } catch (error) {
-      setErrorMessage("Error registering/updating project: " + error.message);
+      setErrorMessage("Error registering project: " + error.message);
       setSuccessMessage("");
     }
   };
 
   return (
-    <main className="project-registration-container">
-      <section className="registration">
-        <h2 className="text-center mb-4 text-primary">Register Project</h2>
+    <div className="container d-flex justify-content-center align-items-center mt-4">
+      <div className="card shadow-lg p-4" style={{ maxWidth: "500px", width: "100%" }}>
+        <h2 className="text-center mb-3 text-primary">Register Project</h2>
 
         {successMessage && <div className="alert alert-success">{successMessage}</div>}
         {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+        {validationError && <div className="alert alert-warning">{validationError}</div>}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Name:</label>
+          <div className="mb-3">
+            <label className="form-label">Project Name</label>
             <input
               type="text"
               name="name"
@@ -95,8 +110,8 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
             />
           </div>
 
-          <div className="form-group">
-            <label>Description:</label>
+          <div className="mb-3">
+            <label className="form-label">Description</label>
             <textarea
               name="description"
               className="form-control"
@@ -106,116 +121,62 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
             ></textarea>
           </div>
 
-          <div className="form-group">
-            <label>Start Date:</label>
+          <div className="mb-3">
+            <label className="form-label">Start Date</label>
             <input
               type="date"
               name="startDate"
               className="form-control"
               value={formData.startDate}
+              min={new Date().toISOString().split("T")[0]} // Restrict past dates
               onChange={handleChange}
               required
             />
           </div>
 
-          <div className="form-group">
-            <label>End Date:</label>
+          <div className="mb-3">
+            <label className="form-label">End Date</label>
             <input
               type="date"
               name="endDate"
               className="form-control"
               value={formData.endDate}
+              min={formData.startDate || new Date().toISOString().split("T")[0]} // Restrict past start date
               onChange={handleChange}
               required
             />
           </div>
 
-          <div className="form-group">
-            <label>Managed By (User ID):</label>
-            <input
-              type="text"
-              name="userId"
+          <div className="mb-3">
+            <label className="form-label">Managed By (Project Manager)</label>
+            <select
+              name="managedBy"
               className="form-control"
-              value={formData.userId}
-              onChange={handleChange}
+              value={formData.managedBy}
+              onChange={handleManagerChange}
               required
-            />
+            >
+              <option value="">Select Manager</option>
+              {managers.map((manager) => (
+                <option key={manager.userID} value={manager.userID}>
+                  {manager.name}
+                </option>
+              ))}
+            </select>
           </div>
 
-          <div className="form-group">
-            <label>File Attachment:</label>
-            <input
-              type="file"
-              name="file"
-              className="form-control"
-              onChange={handleFileChange}
-            />
+          <div className="mb-3">
+            <label className="form-label">File Attachment</label>
+            <input type="file" name="file" className="form-control" onChange={handleFileChange} />
           </div>
 
-          <div className='d-flex justify-content-between'>
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
-              Cancel
-            </button>
+          <div className="d-flex justify-content-between">
+            <button type="submit" className="btn btn-primary">Submit</button>
+            <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
           </div>
         </form>
-      </section>
-
-      <style jsx>{`
-        body {
-          background-color: #f4f4f4;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-        }
-
-        .project-registration-container {
-          width: 500px;
-          background: white;
-          padding: 30px;
-          border-radius: 15px;
-          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        .registration h2 {
-          text-align: center;
-          color: #007bff;
-        }
-
-        .form-group {
-          margin-bottom: 15px;
-        }
-
-        .form-group input,
-        .form-group textarea {
-          width: 100%;
-          padding: 10px;
-          border: 1px solid #ccc;
-          border-radius: 8px;
-        }
-
-        .btn-primary {
-          background-color: #007bff;
-          border: none;
-          padding: 10px 15px;
-          color: white;
-          border-radius: 8px;
-          cursor: pointer;
-        }
-
-        .btn-secondary {
-          background-color: #6c757d;
-          border: none;
-          padding: 10px 15px;
-          color: white;
-          border-radius: 8px;
-          cursor: pointer;
-        }
-      `}</style>
-    </main>
+      </div>
+    </div>
   );
 };
 

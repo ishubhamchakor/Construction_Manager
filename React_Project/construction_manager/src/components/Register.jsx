@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Register = () => {
+const Register = ({ onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -10,223 +11,82 @@ const Register = () => {
     roleId: '',
   });
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = (password) => /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,}$/.test(password);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: '' });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(''); // Clear previous errors
+    let newErrors = {};
 
-    if (formData.password !== formData.confirmPassword) {
-      setErrorMessage('Passwords do not match.');
+    if (!validateEmail(formData.email)) newErrors.email = 'Invalid email format';
+    if (!validatePassword(formData.password)) newErrors.password = 'Password must be at least 4 characters, include 1 number and 1 special character';
+    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:8172/newUser', {
+      await axios.post('http://localhost:8172/newUser', {
         email: formData.email,
         name: formData.name,
         password: formData.password,
-        role: {
-          roleID: formData.roleId,
-        },
+        role: { roleID: formData.roleId },
       });
       alert('User registered successfully');
+      onClose(); // Close the form
     } catch (error) {
       console.error('Error registering user:', error);
     }
   };
 
   return (
-    <main className="App-main">
-      <section className="register">
-        <h2>Register</h2>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="card shadow p-4 w-50">
+        <h2 className="text-center mb-3">Register</h2>
         <form onSubmit={handleSubmit}>
-          <label>
-            Name:
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <label>
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <label>
-            Password:
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <label>
-            Recheck Password:
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <label>
-            Register as:
-            <select name="roleId" value={formData.roleId} onChange={handleChange} required>
-              <option value="" disabled>
-                Select role
-              </option>
+          <div className="mb-3">
+            <label className="form-label">Name:</label>
+            <input type="text" name="name" value={formData.name} onChange={handleChange} required className="form-control" />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Email:</label>
+            <input type="email" name="email" value={formData.email} onChange={handleChange} required className="form-control" />
+            {errors.email && <small className="text-danger">{errors.email}</small>}
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Password:</label>
+            <input type="password" name="password" value={formData.password} onChange={handleChange} required className="form-control" />
+            {errors.password && <small className="text-danger">{errors.password}</small>}
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Recheck Password:</label>
+            <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required className="form-control" />
+            {errors.confirmPassword && <small className="text-danger">{errors.confirmPassword}</small>}
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Register as:</label>
+            <select name="roleId" value={formData.roleId} onChange={handleChange} required className="form-select">
+              <option value="" disabled>Select role</option>
               <option value={2}>Project Manager</option>
               <option value={3}>Site Engineer</option>
             </select>
-          </label>
-          <button type="submit">Register</button>
+          </div>
+          <div className="d-flex justify-content-between">
+            <button type="submit" className="btn btn-primary">Register</button>
+            <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
+          </div>
         </form>
-        <p className="text-center">
-          Already have an account? <a href="/login">Login here</a>
-        </p>
-      </section>
-
-      <style jsx>{`
-        /* Global Reset */
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-
-        body {
-          font-family: Arial, sans-serif;
-          background-color: #f4f4f4;
-          color: #333;
-          height: 100vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        /* Header Styles */
-        .header {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px 20px;
-          background-color: #007bff;
-          color: white;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          height: 80px;
-        }
-
-        .header .logo {
-          width: 50px;
-          height: 50px;
-          margin-right: 15px;
-          border-radius: 50%;
-        }
-
-        .header h1 {
-          font-size: 26px;
-          font-weight: 600;
-          margin: 0;
-        }
-
-        /* Center Registration Container */
-        .register {
-          width: 450px;
-          height: auto;
-          padding: 25px;
-          background-color: #fff;
-          border: 1px solid #ddd;
-          border-radius: 15px;
-          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-          text-align: center;
-          margin-top: 100px;
-        }
-
-        /* Form Label Styling */
-        .register form label {
-          font-weight: bold;
-          font-size: 16px;
-          margin-bottom: 10px;
-          display: block;
-          text-align: left;
-        }
-
-        .register form input,
-        .register form select {
-          width: 100%;
-          padding: 10px 12px;
-          font-size: 16px;
-          margin-bottom: 20px;
-          border: 1px solid #ccc;
-          border-radius: 8px;
-        }
-
-        .register form input:focus,
-        .register form select:focus {
-          border-color: #007bff;
-          outline: none;
-          box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
-        }
-
-        /* Register Button Styling */
-        .register form button {
-          width: 100%;
-          padding: 12px;
-          background-color: #007bff;
-          color: #fff;
-          border: none;
-          border-radius: 8px;
-          font-size: 16px;
-          cursor: pointer;
-        }
-
-        .register form button:hover {
-          background-color: #0056b3;
-        }
-
-        /* Error Message */
-        .error-message {
-          color: #d9534f;
-          margin-bottom: 15px;
-          text-align: center;
-        }
-
-        /* Links */
-        .register .text-center {
-          margin-top: 20px;
-        }
-
-        .register .text-center a {
-          color: #007bff;
-          text-decoration: none;
-        }
-
-        .register .text-center a:hover {
-          text-decoration: underline;
-        }
-      `}</style>
-    </main>
+      </div>
+    </div>
   );
 };
 

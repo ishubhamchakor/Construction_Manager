@@ -1,6 +1,8 @@
+
 package com.example.demo.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,7 @@ public class TaskServices {
 	        }
 
 	        // Retrieve the project using the project ID from the DTO
-	        Project taskproject = project_repo.findByProjectid(task.getProjectid());
+	        Project  taskproject = project_repo.findByProjectid(task.getProjectid());
 	        
 	        // Check if the project exists
 	        if (taskproject == null) {
@@ -52,8 +54,7 @@ public class TaskServices {
 	        
 	        return "Task saved successfully";
 	    }
-	
-	
+	  
 	
 	public List<Tasks> getAllTask() {
 		 return repo.findAll();

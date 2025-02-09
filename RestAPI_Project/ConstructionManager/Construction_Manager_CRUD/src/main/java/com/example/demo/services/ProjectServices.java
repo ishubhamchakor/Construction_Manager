@@ -1,6 +1,8 @@
 package com.example.demo.services;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,8 +26,6 @@ public class ProjectServices {
         System.out.println("Fetched Projects: " + projects);  // Debug log
         return projects;
     }
-    
- 
 
     public Project registerProject(String projectName, String description, 
                                    String startDate, String endDate, 
@@ -46,5 +46,12 @@ public class ProjectServices {
         project.setFileAttachment(file != null ? file.getBytes() : null);
 
         return project_repo.save(project);
+    	}
+
+     //get project by userid 
+    
+    public List<Project> getProjectsManagedByUser(int userId) {
+        return project_repo.findByManagedByUserId(userId);
     }
+
 }

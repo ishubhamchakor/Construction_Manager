@@ -44,7 +44,8 @@ public class Project {
     @Column(name = "file_attachment", columnDefinition = "LONGBLOB")
     private byte[] fileAttachment;
 
-    // ✅ ManagedBy Relationship (Many Projects can be managed by One User)
+    // ManagedBy Relationship (Many Projects can be managed by One User)
+    
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "managed_by")
@@ -55,9 +56,11 @@ public class Project {
 //    @JoinColumn(name = "created_by", referencedColumnName = "UserID", nullable = true)
 //    private User createdBy;
 
-    // ✅ One project can have many tasks
+    // One project can have many tasks
+    
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-//    @JoinColumn(name = "taskid", nullable = false)
-    private List<Tasks> tasks;
+//  @JoinColumn(name = "taskid", nullable = false)
+    private List<Tasks> tasks; 
+    
 }

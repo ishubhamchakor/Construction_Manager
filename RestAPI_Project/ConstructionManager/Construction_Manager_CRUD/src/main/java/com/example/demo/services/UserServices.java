@@ -23,5 +23,10 @@ public class UserServices {
 	public List<User> getProjectManagers() {
         return urepo.findByRoleId(2);
     }
+	
+	// Get all site engineers (roleId = 3)
+    public List<User> getSiteEngineers() {
+        return urepo.findByRoleId(3);
+    }
 
 }

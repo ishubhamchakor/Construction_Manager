@@ -12,7 +12,7 @@ const SelectTaskProject = ({ selectedProject, setShowModal, setSelectedTask }) =
 
     const fetchTasksByProjectID = async (projectid) => {
         try {
-            const response = await axios.get(`http://localhost:8173/getAllTaskprojectbyId/${projectid}`);
+            const response = await axios.get(`http://localhost:8170/crud/getAllTaskprojectbyId/${projectid}`);
             setTasks(response.data);
         } catch (error) {
             console.error("Error fetching tasks:", error);

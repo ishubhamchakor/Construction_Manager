@@ -18,7 +18,7 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8173/project-managers")
+      .get("http://localhost:8170/crud/project-managers")
       .then((response) => setManagers(response.data))
       .catch(() => setErrorMessage("Failed to load project managers."));
 
@@ -71,7 +71,7 @@ const ProjectRegistration = ({ onClose, existingProject }) => {
     form.append("managedBy", formData.managedBy);
 
     try {
-      const response = await axios.post("http://localhost:8173/api/newProject", form, {
+      const response = await axios.post("http://localhost:8170/crud/newProject", form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

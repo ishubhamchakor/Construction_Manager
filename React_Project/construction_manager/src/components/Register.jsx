@@ -35,7 +35,7 @@ const Register = ({ onClose }) => {
     }
 
     try {
-      await axios.post('http://localhost:8172/newUser', {
+      await axios.post('http://localhost:8170/auth/newUser', {
         email: formData.email,
         name: formData.name,
         password: formData.password,

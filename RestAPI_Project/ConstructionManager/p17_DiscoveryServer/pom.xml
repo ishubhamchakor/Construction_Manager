@@ -8,10 +8,10 @@
 		<version>3.4.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>ConstructionManager_MicroServices</artifactId>
+	<groupId>com.example.demo</groupId>
+	<artifactId>p17_DiscoveryServer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ConstructionManager_MicroServices</name>
+	<name>p17_DiscoveryServer</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

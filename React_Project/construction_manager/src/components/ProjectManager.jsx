@@ -17,9 +17,11 @@ const ProjectManager = () => {
   const dispatch = useDispatch();
 
 
-
   const authState = useSelector((state) => state.auth);
   const userID = authState.user ? authState.user.uid : null;
+
+  const username = authState.user ? authState.user.name : "User"; 
+  
 
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const ProjectManager = () => {
 
   const fetchAllProjects = async () => {
     try {
-      const response = await axios.get(`http://localhost:8173/api/managed-by/${userID}`);
+      const response = await axios.get(`http://localhost:8170/crud/managed-by/${userID}`);
       setProjects(response.data);
     } catch (error) {
       console.error("Error fetching projects:", error);
@@ -51,10 +53,10 @@ const ProjectManager = () => {
   return (
     <>
    <Navbar/>
-    <div className="container-fluid">
-      <div className="text-center mb-4 mt-5">
-        <h2 className="text-primary mb-5">Welcome to the Project Manager Dashboard!</h2>
-      </div>
+   <div className="container-fluid">
+        <div className="text-center mb-4 mt-5">
+          <h2 className="text-primary mb-5">Welcome to Project Manager Dashboard</h2> 
+        </div>
 
       <div className="row justify-content-center">
         {projects.map((project) => (

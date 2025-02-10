@@ -55,10 +55,10 @@ public class Tasks {
 //    @JoinColumn(name = "assignedby", referencedColumnName = "UserID")
 //    private User assignedby;
 
-    @Lob
-    @Column(name = "fileattachment", columnDefinition = "BLOB")
-    @JsonIgnore
-    private byte[] fileattachment;
+//    @Lob
+//    @Column(name = "fileattachment", columnDefinition = "BLOB")
+//    @JsonIgnore
+//    private byte[] fileattachment;
 
     // ✅ Many tasks belong to one project
     @ManyToOne

@@ -6,11 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class P17GaetWayApplication {
+public class P17GateWayApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(P17GaetWayApplication.class, args);
-		
+		SpringApplication.run(P17GateWayApplication.class, args);
 	}
 
 }

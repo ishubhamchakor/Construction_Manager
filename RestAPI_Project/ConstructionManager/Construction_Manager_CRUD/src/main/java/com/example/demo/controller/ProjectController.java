@@ -20,8 +20,9 @@ import com.example.demo.services.ProjectServices;
 
 
 @RestController
-@RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3017")
+@RequestMapping("/crud")
+
+//@CrossOrigin(origins = "http://localhost:3017")
 public class ProjectController {
 	@Autowired
     private ProjectServices projectService;

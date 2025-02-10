@@ -24,7 +24,7 @@ const SiteEngineer = () => {
 
   const fetchAllProject = () => {
     axios
-      .get(`http://localhost:8173/api/managed-by/${userID}`)
+      .get(`http://localhost:8170/crud/managed-by/${userID}`)
       .then((response) => {
         setAllProjects(response.data);
         console.log("Projects fetched:", response.data);
@@ -44,7 +44,7 @@ const SiteEngineer = () => {
 
   const fetchtaskByProjectId = () => {
     axios
-      .get(`http://localhost:8173/getAllTaskprojectbyId/${selectedProject}`)
+      .get(`http://localhost:8170/crud/getAllTaskprojectbyId/${selectedProject}`)
       .then((response) => {
         console.log("Fetched tasks:", response.data);
         setAlltasks(response.data);

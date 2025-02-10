@@ -14,7 +14,7 @@ const TaskShowModel = ({ setShowModal, selectedTask }) => {
 
   const fetchIssueRelatedTask = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:8173/task_Issues/${id}`);
+      const response = await axios.get(`http://localhost:8170/crud/task_Issues/${id}`);
       console.log("Issue Data", response.data);
       setIssue(response.data);
     } catch (error) {

@@ -94,7 +94,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8172/login', formData);
+      const response = await axios.post('http://localhost:8170/auth/login', formData);
       const data = response.data;
       const roleID = data.role.roleID;
 

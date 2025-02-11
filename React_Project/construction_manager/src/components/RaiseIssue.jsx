@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Navbar } from "./Navbar";
 
 export const RaiseIssue = () => {
   const { id } = useParams(); // Get ID from URL params
@@ -26,7 +25,7 @@ export const RaiseIssue = () => {
     e.preventDefault();
     console.log("Submitting issue data:", issueData);
     try {
-      const response = await axios.post(`http://localhost:8173/issues/${id}`, issueData);
+      const response = await axios.post(`http://localhost:8170/crud/issues/${id}`, issueData);
       console.log("Response:", response.data);
       alert("Issue submitted successfully!"); // Success message
     } catch (error) {

@@ -7,16 +7,18 @@ import org.springframework.http.ResponseEntity;
 
 import com.example.demo.Dto.TasksaveDto;
 import com.example.demo.entities.Tasks;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.services.TaskServices;
-@CrossOrigin(origins = "http://localhost:3017")
+
+//@CrossOrigin(origins = "http://localhost:3017")
 @RestController
+@RequestMapping("/crud")
 public class TaskController {
 	@Autowired
    TaskServices service ;

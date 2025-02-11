@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entities.Role;
@@ -18,8 +19,9 @@ import com.example.demo.entities.UserLoginRequest;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.services.UserServices;
 
-@RestController
-@CrossOrigin(origins = "http://localhost:3017")
+//@CrossOrigin(origins = "http://localhost:3017")
+@RequestMapping("/crud")
+@RestController()
 public class UserController {
 
 	@Autowired
@@ -35,4 +37,9 @@ public class UserController {
         return ResponseEntity.ok(managers);
     }
 
+	
+	@GetMapping("/users/site-engineers")
+    public List<User> getSiteEngineers() {
+        return user.getSiteEngineers();
+    }
 }
